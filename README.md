@@ -32,12 +32,25 @@ Data ingestion from parquet to postgreSQL:
    db_config = {
     'host':'localhost',
     'database':'parquetpostgres',
-    'user':'postgres',
-    'password':'postgres'
+    'user':'*****',
+    'password':'*****'
    }
 
    conn = psycopg2.connect(**db_config)
    ```
 5. [E]xtract -- read parquet & convert into pandas data frame
-6. [T]ransform -- remove uncessary string & conver to numeric
-7. [L]oad -- load pandas to postgres
+   ```python3
+   df = pd.read_parquet('CO2 Emission Country.parquet')
+   ```
+7. [T]ransform -- remove uncessary string & conver to numeric
+   ```python3
+   df['% of global total'] = df['% of global total'].str.replace('%', '', regex=False)
+   ```
+   ```python3
+   df['Fossil emissions 2023'] = pd.to_numeric(df['Fossil emissions 2023'], errors='raise')
+   ```
+9. [L]oad -- load pandas to postgres
+   ```python3
+   engine = create_engine(f"postgresql+psycopg2://{db_config['user']}:{db_config['password']}@{db_config['host']}:{db_config.get('port', 5432)}/{db_config['database']}")
+   df.to_sql(table_name, engine, if_exists='append', index=False)
+   ```
