@@ -20,7 +20,24 @@ To follow along this learning need to available below requirement on system:
   ```
 # *Project Flow*
 Data ingestion from parquet to postgreSQL:
-1. Import python library for data manipulation & postgres connection -- pandas, sqlalchemy & psycopg2
-2. [E]xtract -- read parquet & conver into pandas data frame
-3. [T]ransform -- remove uncessary string & conver to numeric
-4. [L]oad -- load pandas to postgres
+1. Import python library for data manipulation
+   ```python3
+   import pandas as pd
+   ```
+3. postgres connection
+   ```python3
+   from sqlalchemy import create_engine
+   import psycopg2
+
+   db_config = {
+    'host':'localhost',
+    'database':'parquetpostgres',
+    'user':'postgres',
+    'password':'postgres'
+   }
+
+   conn = psycopg2.connect(**db_config)
+   ```
+5. [E]xtract -- read parquet & convert into pandas data frame
+6. [T]ransform -- remove uncessary string & conver to numeric
+7. [L]oad -- load pandas to postgres
